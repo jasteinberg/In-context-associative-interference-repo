@@ -1,0 +1,245 @@
+== Qwen3-0.6B-Base  (beta = 0.0884) ==
+D3 head set (by cued share at N=8, selection seeds [0]):
+  L1H15: mean a_1 = 0.624
+  L6H13: mean a_1 = 0.560
+  L11H13: mean a_1 = 0.559
+  L19H5: mean a_1 = 0.555
+  L14H15: mean a_1 = 0.515
+  L6H6: mean a_1 = 0.514
+  L13H14: mean a_1 = 0.488
+  L9H12: mean a_1 = 0.475
+
+P1 slopes (logit A_att vs ln(N-1), A in (0.1, 0.9); predict 1):
+  L1H15:  high: +0.91   low: +0.52   mid: +0.44
+  L6H6:  high: +0.53   low: +0.53   mid: +0.39
+  L6H13:  high: +0.47   low: +0.69   mid: +0.44
+  L9H12:  high: +0.29   low: +0.92   mid: +0.55
+  L11H13:  high: +0.20   low: +0.66   mid: +0.41
+  L13H14:  high: +0.18   low: +0.09   mid: -0.08
+  L14H15:  high: +0.13   low: -0.02   mid: -0.21
+  L19H5:  high: +0.61   low: +0.52   mid: +0.25
+  pooled: median +0.44, IQR [+0.19, +0.54], n = 24
+P1 corrected slope (logit A + Delta - s2/2 vs ln(N-1); predict 1): median +0.98, IQR [+0.92, +1.04], n = 24
+
+Pointwise P2 residual logit A - [ln(N-1) - Delta + s2/2] (predict 0), by N (median over heads/rho/seeds):
+     median  mean   std  count
+n                             
+2     -0.00 -0.00  0.00    216
+4     -0.50 -0.93  1.16    216
+8     -0.40 -0.59  0.66    216
+16    -0.35 -0.50  0.56    216
+32    -0.32 -0.42  0.41    216
+64    -0.29 -0.37  0.39    216
+128   -0.17 -0.33  0.46    216
+256   -0.25 -0.48  0.77    216
+
+A_att at D3 heads, median over heads/seeds, by (rho, N):
+n       2      4      8      16     32     64     128    256
+rho                                                         
+high  0.291  0.407  0.440  0.688  0.782  0.857  0.881  0.944
+low   0.093  0.469  0.495  0.705  0.890  0.933  0.888  0.877
+mid   0.115  0.716  0.806  0.690  0.847  0.897  0.882  0.903
+
+Delta at D3 heads, median, by (rho, N):
+n      2     4     8     16    32    64    128   256
+rho                                                 
+high  0.90  1.71  2.81  3.01  3.25  3.54  4.26  3.79
+low   2.28  2.24  2.91  2.68  2.19  2.52  4.08  4.79
+mid   2.04  0.71  1.18  2.85  2.61  3.11  4.18  4.47
+
+Behavioural channel, mean over seeds, by (rho, N):
+-- A_logit --
+n       2      4      8      16     32     64     128    256
+rho                                                         
+high  0.114  0.265  0.287  0.628  0.777  0.877  0.964  0.994
+low   0.070  0.463  0.472  0.590  0.905  0.943  0.858  0.987
+mid   0.170  0.706  0.565  0.765  0.825  0.950  0.990  0.993
+-- A_corr --
+n       2      4      8      16     32     64     128    256
+rho                                                         
+high  0.084  0.382  0.279  0.551  0.788  0.869  0.966  0.996
+low   0.106  0.414  0.354  0.660  0.879  0.952  0.866  0.947
+mid   0.082  0.458  0.598  0.660  0.746  0.935  0.969  0.991
+-- leakage --
+n       2      4      8      16     32     64     128    256
+rho                                                         
+high  0.578  0.772  0.822  0.924  0.919  0.875  0.810  0.612
+low   0.843  0.818  0.826  0.912  0.937  0.891  0.747  0.626
+mid   0.788  0.771  0.914  0.920  0.914  0.897  0.809  0.611
+
+Crossovers ln N* (x = ln(N-1) at A = 1/2):
+  high A_logit: ln N* = 2.43
+  high A_corr: ln N* = 2.57
+  low  A_logit: ln N* = 2.12
+  low  A_corr: ln N* = 2.31
+  mid  A_logit: ln N* = 0.71
+  mid  A_corr: ln N* = 1.35
+  high A_att (median D3 head): ln N* = 2.12
+  low  A_att (median D3 head): ln N* = 1.96
+  mid  A_att (median D3 head): ln N* = 0.76
+
+======================================================================
+CONTROL 1a -- true-value channel, un-renormalized
+model: Qwen3-0.6B-Base   seeds: 10   dtype: float32
+p1_raw = p(v_1); share = sum_i p(v_i) = 1 - leakage;
+acc = P[argmax over vocab == v_1]; A_logit as reported (D1).
+======================================================================
+
+  rho=low (mixed classes)
+        N    p1_raw    share    acc  A_logit
+        2    0.1266   0.1443   0.80   0.0505
+        4    0.0721   0.1482   0.70   0.4445
+        8    0.0461   0.0917   0.80   0.4720
+       16    0.0186   0.0557   0.90   0.6881
+       32    0.0057   0.0617   0.10   0.9084
+       64    0.0061   0.1074   0.10   0.9396
+      128    0.0042   0.1840   0.30   0.9768
+      256    0.0018   0.3740   0.10   0.9951
+    slope d ln p1_raw / d ln(N-1): -0.791 (n=8);  windowed A in (0.1,0.9): -0.836 (n=3);  expected -1
+    accuracy crossover ln N* (acc = 1/2): 3.071
+
+  rho=mid (concrete nouns)
+        N    p1_raw    share    acc  A_logit
+        2    0.1483   0.1964   0.80   0.0949
+        4    0.0770   0.2445   0.20   0.7379
+        8    0.0260   0.0556   0.70   0.5500
+       16    0.0116   0.0555   0.50   0.7865
+       32    0.0064   0.0683   0.40   0.9099
+       64    0.0023   0.0992   0.10   0.9759
+      128    0.0018   0.1917   0.00   0.9908
+      256    0.0009   0.3925   0.00   0.9977
+    slope d ln p1_raw / d ln(N-1): -0.957 (n=8);  windowed A in (0.1,0.9): -1.177 (n=3);  expected -1
+    accuracy crossover ln N* (acc = 1/2): 0.549
+
+  rho=high (person names)
+        N    p1_raw    share    acc  A_logit
+        2    0.3622   0.3987   1.00   0.0360
+        4    0.1535   0.2220   0.90   0.2129
+        8    0.1362   0.1765   1.00   0.1605
+       16    0.0156   0.0583   0.50   0.7030
+       32    0.0098   0.0699   0.40   0.8359
+       64    0.0151   0.1214   0.40   0.8686
+      128    0.0028   0.1935   0.10   0.9857
+      256    0.0021   0.3885   0.00   0.9947
+    slope d ln p1_raw / d ln(N-1): -0.975 (n=8);  windowed A in (0.1,0.9): -0.965 (n=5);  expected -1
+    accuracy crossover ln N* (acc = 1/2): 2.708
+
+  D1/D1b logit-channel crossovers (for comparison)
+    rho=low   A_logit  ln N* = 2.040
+    rho=low   A_corr   ln N* = 2.389
+    rho=mid   A_logit  ln N* = 0.753
+    rho=mid   A_corr   ln N* = 1.052
+    rho=high  A_logit  ln N* = 2.447
+    rho=high  A_corr   ln N* = 2.587
+
+==========================================================================
+CONTROLS 1b (reverse cue) and 3 (ask-the-model)
+model: Qwen3-0.6B-Base   seeds: 10
+A_corr = D1b prior correction against the arm's own null twin.
+1b normalizes over the ENTITY set; forward/ask over the VALUE set.
+==========================================================================
+
+  arm=cued     rho=low   (mixed classes)
+        N  A_logit   A_corr    leak    acc
+        2   0.0505   0.0586   0.856   0.80
+        4   0.4445   0.4540   0.852   0.70
+        8   0.4720   0.2512   0.908   0.80
+       16   0.6881   0.6866   0.944   0.90
+       32   0.9084   0.9012   0.938   0.10
+       64   0.9396   0.9679   0.893   0.10
+      128   0.9768   0.9715   0.816   0.30
+      256   0.9951   0.9933   0.626   0.10
+    ln N* [A_logit] = 2.040
+    ln N* [A_corr] = 2.389
+
+  arm=cued     rho=mid   (concrete nouns)
+        N  A_logit   A_corr    leak    acc
+        2   0.0949   0.0373   0.804   0.80
+        4   0.7379   0.5357   0.756   0.20
+        8   0.5500   0.6838   0.944   0.70
+       16   0.7865   0.7516   0.944   0.50
+       32   0.9099   0.8778   0.932   0.40
+       64   0.9759   0.9451   0.901   0.10
+      128   0.9908   0.9776   0.808   0.00
+      256   0.9977   0.9930   0.608   0.00
+    ln N* [A_logit] = 0.753
+    ln N* [A_corr] = 1.052
+
+  arm=cued     rho=high  (person names)
+        N  A_logit   A_corr    leak    acc
+        2   0.0360   0.0571   0.601   1.00
+        4   0.2129   0.3291   0.778   0.90
+        8   0.1605   0.0844   0.824   1.00
+       16   0.7030   0.6104   0.942   0.50
+       32   0.8359   0.8529   0.930   0.40
+       64   0.8686   0.9340   0.879   0.40
+      128   0.9857   0.9862   0.807   0.10
+      256   0.9947   0.9957   0.611   0.00
+    ln N* [A_logit] = 2.447
+    ln N* [A_corr] = 2.587
+
+  arm=reverse  rho=low   (mixed classes)
+        N  A_logit   A_corr    leak    acc
+        2   0.7797   0.3796   1.000   0.00
+        4   0.5908   0.6699   1.000   0.00
+        8   0.9739   0.8420   0.999   0.00
+       16   0.9891   0.9174   1.000   0.00
+       32   0.9931   0.9656   1.000   0.00
+       64   0.9985   0.9826   1.000   0.00
+      128   0.9993   0.9902   0.999   0.00
+      256   0.9999   0.9964   0.998   0.00
+    ln N* [A_logit] = 0.000 (censored)
+    ln N* [A_corr] = 0.450
+
+  arm=reverse  rho=mid   (concrete nouns)
+        N  A_logit   A_corr    leak    acc
+        2   0.2777   0.2616   1.000   0.00
+        4   0.7775   0.7299   1.000   0.00
+        8   0.8820   0.8571   1.000   0.00
+       16   0.9810   0.9369   1.000   0.00
+       32   0.9718   0.9687   1.000   0.00
+       64   0.9940   0.9824   1.000   0.00
+      128   0.9943   0.9901   0.999   0.00
+      256   0.9988   0.9963   1.000   0.00
+    ln N* [A_logit] = 0.476
+    ln N* [A_corr] = 0.561
+
+  arm=reverse  rho=high  (person names)
+        N  A_logit   A_corr    leak    acc
+        2   0.0745   0.2503   0.992   0.00
+        4   0.6117   0.6301   0.987   0.20
+        8   0.8749   0.7826   0.997   0.00
+       16   0.9179   0.9100   0.995   0.00
+       32   0.9895   0.9635   0.997   0.00
+       64   0.9942   0.9835   0.991   0.00
+      128   0.9982   0.9904   0.986   0.00
+      256   0.9990   0.9963   0.969   0.00
+    ln N* [A_logit] = 0.931
+    ln N* [A_corr] = 0.740
+
+  [ask: null twin 'asknull' missing -- raw only, no D1b correction]
+
+  arm=ask      rho=high  (person names)
+        N  A_logit    leak    acc
+        2   0.0272   0.281   0.90
+        4   0.0786   0.326   0.70
+        8   0.0154   0.180   1.00
+       16   0.0278   0.212   1.00
+       32   0.0297   0.125   1.00
+       64   0.0672   0.125   0.80
+      128   0.0050   0.020   1.00
+      256   0.0607   0.056   0.70
+    ln N* [A_logit] = nan
+
+==========================================================================
+P2 IDENTITY WITHIN EACH CUE FRAME (high class)
+model: Qwen3-0.6B-Base   select seed 0, test seeds 1-9
+x* = ln(N-1) at A_att = 1/2;  pred = Delta - sigma^2/2 at x*
+residual = x* - pred  (P2 predicts 0)
+==========================================================================
+  arm           n_head  cens   med x*  med pred  residual  Delta@8
+  cued               8     0    2.198     2.126    +0.027    2.594
+  relation           8     0    0.642     0.685    +0.007    1.431
+  repeat             7     1    0.713     0.681    +0.010    1.333
+  repeatphrase       6     2    0.553     0.535    -0.019    1.123
+  ask                7     0    4.972     2.912    +0.198    3.036

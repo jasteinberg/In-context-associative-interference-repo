@@ -1,0 +1,24 @@
+# P2 residual decomposition -- Qwen3-0.6B-Base
+heads [(1, 15), (6, 13), (11, 13), (19, 5), (14, 15), (6, 6), (13, 14), (9, 12)]; test seeds [1, 2, 3, 4, 5, 6, 7, 8, 9]; 19 uncensored / 24 points
+residual = ln N*_meas - pred  (median [IQR], uncensored)
+  gauss   +0.348 [+0.120,+0.511] n=19
+  k3      +0.256 [+0.055,+0.474] n=19
+  exact   -0.102 [-0.311,+0.118] n=19
+  gaussN  -0.069 [-0.243,+0.162] n=19
+per class (gauss / exact):
+  high  +0.099 [+0.035,+0.468] n=3  /  -0.184 [-0.276,-0.143] n=3
+  low   +0.340 [+0.176,+0.464] n=8  /  -0.289 [-0.371,-0.121] n=8
+  mid   +0.412 [+0.226,+0.505] n=8  /  +0.118 [-0.026,+0.165] n=8
+truncation terms at x* (median [IQR]):
+  G-s2/2   -0.562 [-0.696,-0.255] n=19
+  k3/6     -0.034 [-0.098,-0.014] n=19
+  GN-s2/2  -0.418 [-0.619,-0.198] n=19
+  s2       +2.008 [+1.503,+3.450] n=19
+  freeze   +1.088 [+0.583,+1.941] n=19
+  sink     +0.058 [+0.000,+0.124] n=19
+  filler   +0.116 [+0.077,+0.166] n=19
+attribution of r_gauss (medians):
+  finite-N Gaussian part  -(GN - s2/2) = +0.418
+  non-Gaussian part       -(G - GN)    = +0.038
+  of which k3/6           -k3/6        = +0.034
+  median/interp noise      res_exact   = -0.102

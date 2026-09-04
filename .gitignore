@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+runs/grid/
+runs/probe/
+runs/range_check/
+logs/
+*.npz
+*.pt
+*.safetensors
+.DS_Store
