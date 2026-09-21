@@ -1,10 +1,8 @@
 # In-context associative interference
 
 Code, figures, and analysis summaries for the
-write-up *In-context associative interference: a zero-parameter onset law
-and its cue-format generality* (Julia Steinberg, September 2026; MATS 12.0
-application, Neel Nanda stream).
-
+*In-context associative interference: a zero-parameter onset law
+and its cue-format generality*
 **Question.** Does the signal-versus-interference argument that sets the
 capacity of an associative memory transfer, quantitatively, to attention?
 Give a model $N$ paired associates in context, cue one, and measure at the
